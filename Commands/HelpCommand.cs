@@ -15,7 +15,7 @@ public sealed class HelpCommand : ICommand
     public string Name => "help";
     public string Description => "Displays a help message";
 
-    public void Execute(ReplState state, string[] args)
+    public Task ExecuteAsync(ReplState state, string[] args)
     {
         Console.WriteLine("Welcome to the Pokedex!");
         Console.WriteLine("Usage:");
@@ -24,6 +24,7 @@ public sealed class HelpCommand : ICommand
         {
             Console.WriteLine($"{command.Name}: {command.Description}");
         }
+        return Task.CompletedTask;
     }
 
 

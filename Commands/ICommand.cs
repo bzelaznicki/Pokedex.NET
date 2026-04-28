@@ -6,5 +6,5 @@ public interface ICommand
 {
     string Name { get; }
     string Description { get; }
-    void Execute(ReplState state, string[] args);
+    Task ExecuteAsync(ReplState state, string[] args);
 }

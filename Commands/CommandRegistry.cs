@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace PokedexNet.Commands;
 
 public sealed class CommandRegistry
@@ -11,7 +13,7 @@ public sealed class CommandRegistry
         _commands[command.Name] = command;
     }
 
-    public bool TryGet(string name, out ICommand? command)
+    public bool TryGet(string name, [NotNullWhen(true)]  out ICommand? command)
     {
         return _commands.TryGetValue(name, out command);
     }
@@ -22,6 +24,8 @@ public sealed class CommandRegistry
 
         registry.Register(new HelpCommand(registry));
         registry.Register(new ExitCommand());
+        registry.Register(new MapCommand());
+        registry.Register(new MapBackCommand());
 
         return registry;
     }

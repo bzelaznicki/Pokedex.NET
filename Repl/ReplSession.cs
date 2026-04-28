@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using PokedexNet.Commands;
 
 namespace PokedexNet.Repl;
@@ -8,7 +9,7 @@ public sealed class ReplSession
     private readonly CommandRegistry _commands = CommandRegistry.CreateDefault();
     private readonly ReplState _state = new();
 
-    public void Start()
+    public async Task StartAsync()
     {
         while (!_state.ShouldExit)
         {
@@ -37,7 +38,7 @@ public sealed class ReplSession
                 continue;
             }
 
-            command.Execute(_state, args);
+            await command.ExecuteAsync(_state, args);
 
 
         }
