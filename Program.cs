@@ -1,7 +1,4 @@
-﻿public class Program
-{
-    static void Main()
-    {
-        Console.WriteLine("Hello, world!");
-    }
-}
+﻿using PokedexNet.Repl;
+
+var repl = new ReplSession();
+repl.Start();
