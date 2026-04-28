@@ -10,7 +10,8 @@ public sealed class ReplSession
 
     public void Start()
     {
-        while (!_state.ShouldExit) {
+        while (!_state.ShouldExit)
+        {
             Console.Write("Pokedex > ");
 
             string? input = Console.ReadLine();
@@ -30,7 +31,8 @@ public sealed class ReplSession
             string commandName = words[0];
             string[] args = words.Skip(1).ToArray();
 
-            if (!_commands.TryGet(commandName, out ICommand? command)) {
+            if (!_commands.TryGet(commandName, out ICommand? command))
+            {
                 Console.WriteLine("Unknown command");
                 continue;
             }

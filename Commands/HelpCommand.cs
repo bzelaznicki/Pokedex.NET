@@ -21,10 +21,10 @@ public sealed class HelpCommand : ICommand
         Console.WriteLine("Usage:");
         Console.WriteLine();
         foreach (ICommand command in _commands.All)
-            {
-                Console.WriteLine($"{command.Name}: {command.Description}");
-            }
+        {
+            Console.WriteLine($"{command.Name}: {command.Description}");
+        }
     }
 
-    
+
 }

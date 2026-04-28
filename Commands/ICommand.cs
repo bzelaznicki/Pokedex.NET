@@ -4,7 +4,7 @@ namespace PokedexNet.Commands;
 
 public interface ICommand
 {
-    string Name {get;}
-    string Description {get;}
+    string Name { get; }
+    string Description { get; }
     void Execute(ReplState state, string[] args);
 }
