@@ -1,10 +1,16 @@
+using PokedexNet.Commands;
+
 namespace PokedexNet.Repl;
 
 public sealed class ReplSession
 {
+
+    private readonly CommandRegistry _commands = CommandRegistry.CreateDefault();
+    private readonly ReplState _state = new();
+
     public void Start()
     {
-        while (true) {
+        while (!_state.ShouldExit) {
             Console.Write("Pokedex > ");
 
             string? input = Console.ReadLine();
@@ -22,13 +28,16 @@ public sealed class ReplSession
             }
 
             string commandName = words[0];
+            string[] args = words.Skip(1).ToArray();
 
-            if (commandName == "exit")
-            {
-                return;
+            if (!_commands.TryGet(commandName, out ICommand? command)) {
+                Console.WriteLine("Unknown command");
+                continue;
             }
 
-            Console.WriteLine($"Unknown command: {commandName}");
+            command.Execute(_state, args);
+
+
         }
     }
 }
