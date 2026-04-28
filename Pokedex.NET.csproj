@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Pokedex.NET.Tests/**/*.cs" />
+  </ItemGroup>
+
 </Project>
