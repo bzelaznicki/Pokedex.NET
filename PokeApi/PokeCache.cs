@@ -4,6 +4,14 @@ public class PokeCache
 {
     
     private readonly Dictionary<string, CacheEntry<object>> _cache = new();
+    private TimeSpan Interval;
+    Timer? reapTimer;
+
+    public PokeCache(int interval)
+    {
+        Interval = TimeSpan.FromSeconds(interval);
+        startReapLoop();
+    }
 
     public void Add<T>(string key, T value)
     {
@@ -22,6 +30,25 @@ public class PokeCache
             return value;
         }
         return default;
+    }
+
+    private void startReapLoop()
+    {
+        reapTimer = new Timer(reap, null, TimeSpan.Zero, Interval);
+    }
+
+
+    private void reap(object? state)
+    {
+        var now = DateTimeOffset.UtcNow;
+
+        foreach (var item in _cache.ToList())
+        {
+            if (item.Value.CreatedAt < now - Interval)
+            {
+                _cache.Remove(item.Key);
+            }
+        }
     }
 }
 

@@ -9,7 +9,7 @@ public class PokeCacheTests
 
     public PokeCacheTests()
     {
-        _cache = new PokeCache();
+        _cache = new PokeCache(30);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public class PokeCacheTests
         _cache.Add(key, newValue);
 
         string? cached = _cache.Get<string>(key);
-        
+
         Assert.Equal(cached, newValue);
         
     }
