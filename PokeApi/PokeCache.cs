@@ -1,16 +1,16 @@
 namespace PokedexNet.PokeApi;
 
-public class PokeCache
+public class PokeCache : IDisposable
 {
     
     private readonly Dictionary<string, CacheEntry<object>> _cache = new();
-    private TimeSpan Interval;
-    Timer? reapTimer;
+    private readonly TimeSpan _interval;
+    Timer? _reapTimer;
 
     public PokeCache(int interval)
     {
-        Interval = TimeSpan.FromSeconds(interval);
-        startReapLoop();
+        _interval = TimeSpan.FromMilliseconds(interval);
+        StartReapLoop();
     }
 
     public void Add<T>(string key, T value)
@@ -32,24 +32,37 @@ public class PokeCache
         return default;
     }
 
-    private void startReapLoop()
+    private void StartReapLoop()
     {
-        reapTimer = new Timer(reap, null, TimeSpan.Zero, Interval);
+        _reapTimer = new Timer(Reap, null, _interval, _interval);
     }
 
 
-    private void reap(object? state)
+    private void Reap(object? state)
     {
         var now = DateTimeOffset.UtcNow;
 
         foreach (var item in _cache.ToList())
         {
-            if (item.Value.CreatedAt < now - Interval)
+            if (item.Value.CreatedAt < now - _interval)
             {
                 _cache.Remove(item.Key);
             }
         }
     }
+
+    public void StopReapLoop()
+    {
+        _reapTimer?.Dispose();
+        _reapTimer = null;
+    }
+
+    public void Dispose()
+    {
+        StopReapLoop();
+        GC.SuppressFinalize(this);
+    }
+
 }
 
 public class CacheEntry<T>

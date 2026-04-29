@@ -5,30 +5,26 @@ namespace PokedexNet.Tests;
 public class PokeCacheTests 
 {
 
-    private readonly PokeCache _cache;
-
-    public PokeCacheTests()
-    {
-        _cache = new PokeCache(30);
-    }
-
     [Fact]
     public void Get_ReturnsCachedValue()
     {
-        
+        using var cache = new PokeCache(300);
+
         string key = "https://example.com";
         string value = "testdata";
 
-        _cache.Add(key, value);
-        string? cached = _cache.Get<string>(key);
+        cache.Add(key, value);
+        string? cached = cache.Get<string>(key);
 
-        Assert.Equal(value, cached);   
+        Assert.Equal(value, cached);
     }
+
 
     [Fact]
     public void Get_ReturnsNull_WhenKeyIsMissing()
     {
-        string? cached = _cache.Get<string>("nothing");
+        using var cache = new PokeCache(300);
+        string? cached = cache.Get<string>("nothing");
 
         Assert.Null(cached);
     }
@@ -36,17 +32,70 @@ public class PokeCacheTests
     [Fact]
     public void Add_WhenKeyAlreadyExists_ReplacesCachedValue()
     {
+        using var cache = new PokeCache(300);
         string key = "https://example.com";
         string oldValue = "testdata";
         string newValue = "newdata";
 
-        _cache.Add(key, oldValue);
+        cache.Add(key, oldValue);
 
-        _cache.Add(key, newValue);
+        cache.Add(key, newValue);
 
-        string? cached = _cache.Get<string>(key);
+        string? cached = cache.Get<string>(key);
 
-        Assert.Equal(cached, newValue);
+        Assert.Equal(newValue, cached);
         
     }
+
+    [Fact]
+    public async Task Add_ItemsGetRemovedFromCacheAfterExpiry()
+    {
+        int interval = 300;
+        using var cache = new PokeCache(interval);
+        string key = "https://example.com";
+        string value = "testdata";
+
+        cache.Add(key, value);
+
+        await Task.Delay(interval * 2 + 100);
+
+        string? cached = cache.Get<string>(key);
+
+        Assert.Null(cached);
+    }
+
+
+    [Fact]
+    public async Task StopReapLoop_PreventsExpiryCleanup()
+    {
+        int interval = 300;
+        using var cache = new PokeCache(interval);
+        string key = "https://example.com";
+        string value = "testdata";
+
+        cache.Add(key, value);
+        cache.StopReapLoop();
+
+        await Task.Delay(interval * 2 + 100);
+
+        string? cached = cache.Get<string>(key);
+
+        Assert.Equal(value, cached);
+
+    }
+
+    [Fact]
+    public void Get_ReturnsNull_WhenTypeDoesNotMatch()
+    {
+        using var cache = new PokeCache(300);
+
+        string key = "https://example.com";
+        string value = "testdata";
+
+        cache.Add<string>(key, value);
+        var cached = cache.Get<LocationAreaResponse>(key);
+
+        Assert.Null(cached);       
+    }
+
 }
