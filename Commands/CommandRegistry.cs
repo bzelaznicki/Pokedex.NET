@@ -26,6 +26,7 @@ public sealed class CommandRegistry
         registry.Register(new ExitCommand());
         registry.Register(new MapCommand());
         registry.Register(new MapBackCommand());
+        registry.Register(new ExploreCommand());
 
         return registry;
     }
