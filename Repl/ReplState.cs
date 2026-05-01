@@ -11,7 +11,7 @@ public sealed class ReplState
 
     public ReplState()
     {
-        PokeApiClient = new PokeApiClient();
+        PokeApiClient = new PokeApiClient(10000);
     }
 
 }

@@ -17,8 +17,22 @@ public sealed class ExploreCommand : ICommand
         }
 
         string location = args[0];        
+        try
+        {
+            Console.WriteLine($"Exploring {location}...");
+            var locationData = await state.PokeApiClient.FetchLocationAsync(location);
 
-        Console.WriteLine($"Exploring {location}...");
-        Console.WriteLine("Found Pokemon");
+            Console.WriteLine("Found Pokemon:"); 
+            foreach(var encounter in locationData.PokemonEncounters)
+            {
+                Console.WriteLine($" - {encounter.Pokemon.Name}");
+            }
+
+
+        } catch 
+        {
+            Console.WriteLine($"Location not found: {location}");
+        }
+
     }
     }
