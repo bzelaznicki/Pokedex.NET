@@ -9,6 +9,8 @@ public sealed class ReplState
     public string? NextLocationsUrl { get; set; }
     public string? PreviousLocationsUrl { get; set; }
 
+    public Dictionary<string, Pokemon> Pokemon = [];
+
     public ReplState()
     {
         PokeApiClient = new PokeApiClient(10000);

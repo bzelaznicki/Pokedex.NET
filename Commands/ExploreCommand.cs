@@ -5,7 +5,7 @@ namespace PokedexNet.Commands;
 public sealed class ExploreCommand : ICommand
 {
     public string Name => "explore";
-    public string Description => "Explores a location";
+    public string Description => "Explores a location, listing the available Pokémon. Usage: explore <location>.";
 
     public async Task ExecuteAsync(ReplState state, string[] args)
     {

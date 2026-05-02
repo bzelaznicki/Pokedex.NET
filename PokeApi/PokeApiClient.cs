@@ -65,5 +65,27 @@ public class PokeApiClient
         return res;
 
     }
+    
+    public async Task<Pokemon> FetchPokemonAsync(string pokemonName)
+    {
+        var url = $"{BaseUrl}/pokemon/{pokemonName}";
+        var cached = _pokeCache.Get<Pokemon>(pokemonName);
 
+	if (cached != null) 
+	{
+		return cached;
+	}
+
+	var res = await HttpClient.GetFromJsonAsync<Pokemon>(url);
+
+	if (res == null)
+	{
+		throw new InvalidOperationException("Cannot fetch data");
+	}
+
+	_pokeCache.Add(url, res);
+
+	return res;
+
+    }
 }
