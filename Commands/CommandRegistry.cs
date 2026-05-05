@@ -29,6 +29,7 @@ public sealed class CommandRegistry
         registry.Register(new ExploreCommand());
         registry.Register(new CatchCommand());
         registry.Register(new InspectCommand());
+        registry.Register(new PokedexCommand());
 
         return registry;
     }
