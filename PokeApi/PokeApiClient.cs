@@ -69,7 +69,7 @@ public class PokeApiClient
     public async Task<Pokemon> FetchPokemonAsync(string pokemonName)
     {
         var url = $"{BaseUrl}/pokemon/{pokemonName}";
-        var cached = _pokeCache.Get<Pokemon>(pokemonName);
+        var cached = _pokeCache.Get<Pokemon>(url);
 
 	if (cached != null) 
 	{
